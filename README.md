@@ -1,1 +1,1 @@
-# English-List-of-Words---Project-of-English-Curse-on-FAETEC
+# English List of Words - Project of English Curse on FAETEC
