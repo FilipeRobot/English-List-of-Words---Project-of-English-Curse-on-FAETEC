@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>English List of Words</title>
+		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js" defer></script>
+	</head>
+	<body>
+		<header>
+			<h1>Wellcome to your list of English Words</h1>
+			<p>
+				Here you can write words and translations of that you learned.
+			</p>
+			<p>
+				The tabla is in descending order, so the last word you learned
+				will be at the beginning.
+			</p>
+		</header>
+
+		<main>
+			<section class="card">
+				<h2>Add Words</h2>
+				<div class="input-container">
+					<input type="text" id="campo1" placeholder="English Word" />
+					<input
+						type="text"
+						id="campo2"
+						placeholder="Portuguese Translation"
+					/>
+					<button onclick="adicionarEntrada()">Add</button>
+				</div>
+
+				<p id="mensagem-erro"></p>
+
+				<table id="tabela">
+					<thead>
+						<tr>
+							<th>Number</th>
+							<th>English Word</th>
+							<th>Portuguese Translation</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</section>
+		</main>
+
+		<footer>
+			<p>
+				&copy; 2025 - Make by
+				<a style="color: #f4f4f9" href="https://github.com/FilipeRobot"> FilipeRobot(GitHub)</a>
+			</p>
+			<p><a style="color: #f4f4f9" href="https://github.com/FilipeRobot/#"> GitHub Repository of this project</a></p>
+			<button id="theme-toggle" onclick="alternarTema()">
+				Alter Theme
+			</button>
+		</footer>
+	</body>
+</html>
