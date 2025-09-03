@@ -328,3 +328,18 @@ function removerItem(id) {
 		}
 	}
 }
+
+// Adiciona evento de tecla Enter para adicionar entrada
+document.getElementById('english_word').addEventListener('keypress', function (e) {
+		if (e.key === 'Enter') {
+			adicionarEntrada();
+		};
+	});
+
+// Atualiza o ano de criação no rodapé
+const anoDeCriacao = document.getElementById('ano-de-criacao');
+const anoCriacaoProjeto = 2025; // Defina o ano de criação do projeto
+const anoAtual = new Date().getFullYear();
+
+anoDeCriacao.textContent =
+	anoCriacaoProjeto > anoAtual || anoCriacaoProjeto === anoAtual ? anoCriacaoProjeto : `${anoCriacaoProjeto} - ${anoAtual}`;
