@@ -4,7 +4,7 @@ let contador = 0;
 let itens = [];
 
 // Ao carregar a página, recupera os dados salvos no localStorage e atualiza a tabela
-window.onload = function () {
+window.onload = function onload() {
 	const dadosSalvos = localStorage.getItem('itens');
 	if (dadosSalvos) {
 		itens = JSON.parse(dadosSalvos);
@@ -29,8 +29,8 @@ function salvarLocalStorage() {
 function adicionarEntrada() {
 	// Obtém e limpa os valores dos campos de entrada
 	// Referência aos campos de entrada e à área de mensagem de erro
-	const campo1 = document.getElementById('campo1').value.trim();
-	const campo2 = document.getElementById('campo2').value.trim();
+	const english_word = document.getElementById('english_word').value.trim();
+	const portuguese_word = document.getElementById('portuguese_word').value.trim();
 	const mensagemErro = document.getElementById('mensagem-erro');
 
 	// Limpa mensagem de erro anterior
@@ -38,20 +38,20 @@ function adicionarEntrada() {
 	mensagemErro.textContent = '';
 
 	// Se algum dos campos estiver vazio, interrompe a execução da função
-	if (!campo1 || !campo2) return;
+	if (!english_word || !portuguese_word) return;
 
-	// Verifica se campo1 já existe no array de itens
+	// Verifica se english_word já existe no array de itens
 	const itemExistente = itens.find(
-		(item) => item.Campo1.toLowerCase() === campo1.toLowerCase()
+		(item) => item.English_word.toLowerCase() === english_word.toLowerCase()
 	);
 
 	if (itemExistente) {
 		// Exibe mensagem de erro se a palavra já existe
-		mensagemErro.textContent = `A palavra "${campo1}" já foi adicionada anteriormente (ID: ${itemExistente.ID}). Tente novamente com outra entrada.`;
+		mensagemErro.textContent = `A palavra "${english_word}" já foi adicionada anteriormente (ID: ${itemExistente.ID}). Tente novamente com outra entrada.`;
 		mensagemErro.style.display = 'block';
 		// Limpa os campos de entrada para nova inserção
-		document.getElementById('campo1').value = '';
-		document.getElementById('campo2').value = '';
+		document.getElementById('english_word').value = '';
+		document.getElementById('portuguese_word').value = '';
 		return;
 	}
 
@@ -61,8 +61,8 @@ function adicionarEntrada() {
 	// Monta o novo objeto de item
 	const novoItem = {
 		ID: contador,
-		Campo1: campo1,
-		Campo2: campo2,
+		English_word: english_word,
+		Portuguese_word: portuguese_word,
 	};
 
 	// Adiciona o novo item no início do array
@@ -73,8 +73,8 @@ function adicionarEntrada() {
 	atualizarTabela();
 
 	// Limpa os campos de entrada para nova inserção
-	document.getElementById('campo1').value = '';
-	document.getElementById('campo2').value = '';
+	document.getElementById('english_word').value = '';
+	document.getElementById('portuguese_word').value = '';
 }
 
 // Atualiza a tabela HTML com os itens do array
@@ -90,14 +90,14 @@ function atualizarTabela() {
 	// Insere cada item como uma nova linha na tabela
 	itens.forEach((item) => {
 		const novaLinha = tabelaBody.insertRow();
-		const celulaId = novaLinha.insertCell(0);
-		const celula1 = novaLinha.insertCell(1);
-		const celula2 = novaLinha.insertCell(2);
+		const tableIDCol = novaLinha.insertCell(0);
+		const tableEnglishWordCol = novaLinha.insertCell(1);
+		const tablePortugueseWordCol = novaLinha.insertCell(2);
 
 		// Preenche as células com os dados do item
-		celulaId.textContent = item.ID;
-		celula1.textContent = item.Campo1;
-		celula2.textContent = item.Campo2;
+		tableIDCol.textContent = item.ID;
+		tableEnglishWordCol.textContent = item.English_word;
+		tablePortugueseWordCol.textContent = item.Portuguese_word;
 	});
 }
 
