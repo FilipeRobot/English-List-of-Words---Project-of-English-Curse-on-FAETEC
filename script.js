@@ -55,6 +55,16 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 			document.getElementById('english_word').value = item.English_word;
 			document.getElementById('portuguese_word').value =
 				item.Portuguese_word;
+			idEmEdicao = item.ID;
+			document
+				.querySelector('button[onclick="adicionarEntrada()"]')
+				?.setAttribute('hidden', '');
+			document
+				.querySelector('button[onclick="salvarEdicao()"]')
+				?.removeAttribute('hidden');
+			const mensagemErro = document.getElementById('mensagem-erro');
+			mensagemErro.style.display = 'none';
+			mensagemErro.textContent = '';
 		};
 		tableEditCol.appendChild(btnEditar);
 	});
@@ -63,6 +73,7 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 let contador = 0;
 // Mapa que armazena os itens inseridos (ID como chave)
 let itens = new Map();
+let idEmEdicao = null;
 
 // Ao carregar a página, recupera os dados salvos no localStorage e atualiza a tabela
 window.onload = function onload() {
@@ -125,7 +136,12 @@ function adicionarEntrada() {
 	mensagemErro.textContent = '';
 
 	// Se algum dos campos estiver vazio, interrompe a execução da função
-	if (!english_word || !portuguese_word) return;
+	if (!english_word || !portuguese_word) {
+		mensagemErro.textContent = 'Preencha ambos os campos para salvar.';
+		mensagemErro.style.display = 'block';
+		mensagemErro.style.color = '#ff4d4d';
+		return;
+	}
 
 	// Verifica se english_word já existe no Map de itens
 	let itemExistente = null;
@@ -174,7 +190,6 @@ function atualizarTabela() {
 	const tabelaBody = document
 		.getElementById('tabela')
 		.getElementsByTagName('tbody')[0];
-	// Limpa o conteúdo atual da tabela
 	tabelaBody.innerHTML = '';
 
 	// Insere cada item como uma nova linha na tabela (ordem decrescente de ID)
@@ -198,6 +213,16 @@ function atualizarTabela() {
 			document.getElementById('english_word').value = item.English_word;
 			document.getElementById('portuguese_word').value =
 				item.Portuguese_word;
+			idEmEdicao = item.ID;
+			document
+				.querySelector('button[onclick="adicionarEntrada()"]')
+				?.setAttribute('hidden', '');
+			document
+				.querySelector('button[onclick="salvarEdicao()"]')
+				?.removeAttribute('hidden');
+			const mensagemErro = document.getElementById('mensagem-erro');
+			mensagemErro.style.display = 'none';
+			mensagemErro.textContent = '';
 		};
 		tableEditCol.appendChild(btnEditar);
 	});
@@ -212,4 +237,57 @@ function alternarTema() {
 		? 'claro'
 		: 'escuro';
 	localStorage.setItem('tema', tema);
+}
+
+function salvarEdicao() {
+	const english_word = document.getElementById('english_word').value.trim();
+	const portuguese_word = document
+		.getElementById('portuguese_word')
+		.value.trim();
+	const mensagemErro = document.getElementById('mensagem-erro');
+
+	if (!english_word || !portuguese_word) {
+		mensagemErro.textContent = 'Preencha ambos os campos para salvar.';
+		mensagemErro.style.display = 'block';
+		mensagemErro.style.color = '#ff4d4d';
+		return;
+	}
+
+	// Verifica se english_word já existe no Map de itens
+	let itemExistente = null;
+	for (let item of itens.values()) {
+		if (item.English_word.toLowerCase() === english_word.toLowerCase()) {
+			itemExistente = item;
+			break;
+		}
+	}
+	if (itemExistente) {
+		// Exibe mensagem de erro se a palavra já existe
+		mensagemErro.textContent = `A palavra "${english_word}" já foi adicionada anteriormente (ID: ${itemExistente.ID}). Tente novamente com outra entrada.`;
+		mensagemErro.style.display = 'block';
+		// Limpa os campos de entrada para nova inserção
+		document.getElementById('english_word').value = '';
+		document.getElementById('portuguese_word').value = '';
+		return;
+	}
+
+	if (idEmEdicao !== null) {
+		editarItem(idEmEdicao, english_word, portuguese_word);
+		mensagemErro.textContent = 'Edição salva com sucesso!';
+		mensagemErro.style.display = 'block';
+		mensagemErro.style.color = '#4caf50';
+		document.getElementById('english_word').value = '';
+		document.getElementById('portuguese_word').value = '';
+		document
+			.querySelector('button[onclick="salvarEdicao()"]')
+			?.setAttribute('hidden', '');
+		document
+			.querySelector('button[onclick="adicionarEntrada()"]')
+			?.removeAttribute('hidden');
+		idEmEdicao = null;
+		setTimeout(() => {
+			mensagemErro.style.display = 'none';
+			mensagemErro.style.color = '#ff4d4d';
+		}, 2000);
+	}
 }
