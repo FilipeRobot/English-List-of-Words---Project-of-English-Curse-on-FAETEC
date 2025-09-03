@@ -43,6 +43,7 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 		const tableEnglishWordCol = novaLinha.insertCell(1);
 		const tablePortugueseWordCol = novaLinha.insertCell(2);
 		const tableEditCol = novaLinha.insertCell(3);
+		const tableRemoveCol = novaLinha.insertCell(4);
 
 		tableIDCol.textContent = item.ID;
 		tableEnglishWordCol.textContent = item.English_word;
@@ -50,7 +51,7 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 
 		// Botão de edição para cada linha
 		const btnEditar = document.createElement('button');
-		btnEditar.textContent = 'Editar';
+		btnEditar.textContent = 'Edit';
 		btnEditar.onclick = function () {
 			document.getElementById('english_word').value = item.English_word;
 			document.getElementById('portuguese_word').value =
@@ -67,6 +68,14 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 			mensagemErro.textContent = '';
 		};
 		tableEditCol.appendChild(btnEditar);
+
+		// Botão de remover para cada linha
+		const btnRemover = document.createElement('button');
+		btnRemover.textContent = 'Remove';
+		btnRemover.onclick = function () {
+			removerItem(item.ID);
+		};
+		tableRemoveCol.appendChild(btnRemover);
 	});
 }
 // Contador para gerar IDs únicos para cada entrada
@@ -137,7 +146,7 @@ function adicionarEntrada() {
 
 	// Se algum dos campos estiver vazio, interrompe a execução da função
 	if (!english_word || !portuguese_word) {
-		mensagemErro.textContent = 'Preencha ambos os campos para salvar.';
+		mensagemErro.textContent = 'Please write in both fields to save.';
 		mensagemErro.style.display = 'block';
 		mensagemErro.style.color = '#ff4d4d';
 		return;
@@ -153,7 +162,7 @@ function adicionarEntrada() {
 	}
 	if (itemExistente) {
 		// Exibe mensagem de erro se a palavra já existe
-		mensagemErro.textContent = `A palavra "${english_word}" já foi adicionada anteriormente (ID: ${itemExistente.ID}). Tente novamente com outra entrada.`;
+		mensagemErro.textContent = `The word "${english_word}" has already been added (ID: ${itemExistente.ID}). Please try again with another word.`;
 		mensagemErro.style.display = 'block';
 		// Limpa os campos de entrada para nova inserção
 		document.getElementById('english_word').value = '';
@@ -200,6 +209,7 @@ function atualizarTabela() {
 		const tableEnglishWordCol = novaLinha.insertCell(1);
 		const tablePortugueseWordCol = novaLinha.insertCell(2);
 		const tableEditCol = novaLinha.insertCell(3);
+		const tableRemoveCol = novaLinha.insertCell(4);
 
 		// Preenche as células com os dados do item
 		tableIDCol.textContent = item.ID;
@@ -208,7 +218,7 @@ function atualizarTabela() {
 
 		// Botão de edição para cada linha
 		const btnEditar = document.createElement('button');
-		btnEditar.textContent = 'Editar';
+		btnEditar.textContent = 'Edit';
 		btnEditar.onclick = function () {
 			document.getElementById('english_word').value = item.English_word;
 			document.getElementById('portuguese_word').value =
@@ -225,6 +235,14 @@ function atualizarTabela() {
 			mensagemErro.textContent = '';
 		};
 		tableEditCol.appendChild(btnEditar);
+
+		// Botão de remover para cada linha
+		const btnRemover = document.createElement('button');
+		btnRemover.textContent = 'Remove';
+		btnRemover.onclick = function () {
+			removerItem(item.ID);
+		};
+		tableRemoveCol.appendChild(btnRemover);
 	});
 }
 
@@ -247,7 +265,7 @@ function salvarEdicao() {
 	const mensagemErro = document.getElementById('mensagem-erro');
 
 	if (!english_word || !portuguese_word) {
-		mensagemErro.textContent = 'Preencha ambos os campos para salvar.';
+		mensagemErro.textContent = 'Please write in both fields to save.';
 		mensagemErro.style.display = 'block';
 		mensagemErro.style.color = '#ff4d4d';
 		return;
@@ -263,7 +281,7 @@ function salvarEdicao() {
 	}
 	if (itemExistente) {
 		// Exibe mensagem de erro se a palavra já existe
-		mensagemErro.textContent = `A palavra "${english_word}" já foi adicionada anteriormente (ID: ${itemExistente.ID}). Tente novamente com outra entrada.`;
+		mensagemErro.textContent = `The word "${english_word}" has already been added (ID: ${itemExistente.ID}). Please try again with another word.`;
 		mensagemErro.style.display = 'block';
 		// Limpa os campos de entrada para nova inserção
 		document.getElementById('english_word').value = '';
@@ -273,7 +291,7 @@ function salvarEdicao() {
 
 	if (idEmEdicao !== null) {
 		editarItem(idEmEdicao, english_word, portuguese_word);
-		mensagemErro.textContent = 'Edição salva com sucesso!';
+		mensagemErro.textContent = 'Edit saved successfully!';
 		mensagemErro.style.display = 'block';
 		mensagemErro.style.color = '#4caf50';
 		document.getElementById('english_word').value = '';
@@ -289,5 +307,24 @@ function salvarEdicao() {
 			mensagemErro.style.display = 'none';
 			mensagemErro.style.color = '#ff4d4d';
 		}, 2000);
+	}
+}
+
+/**
+ * Remove um item do Map pelo ID, atualiza localStorage e tabela.
+ * @param {number} id - O ID do item a ser removido.
+ */
+function removerItem(id) {
+	if (itens.has(id)) {
+		itens.delete(id);
+		contador--;
+		salvarLocalStorage();
+		atualizarTabela();
+		// Se estiver filtrando, atualiza a tabela filtrada
+		const buscaInput = document.getElementById('busca');
+		if (buscaInput && buscaInput.value.length >= 3) {
+			const filtrados = buscarItens(buscaInput.value);
+			atualizarTabelaFiltrada(filtrados);
+		}
 	}
 }

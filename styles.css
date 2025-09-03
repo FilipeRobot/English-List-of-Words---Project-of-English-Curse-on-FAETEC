@@ -1,3 +1,17 @@
+@media (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+    }
+
+    .search-container input[type="text"],
+    .search-container button {
+        width: 100%;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+}
 /* Responsividade para dispositivos móveis */
 @media (max-width: 600px) {
     main {
@@ -193,4 +207,10 @@ body.light-theme th {
 body.light-theme #theme-toggle {
     background-color: #ddd;
     color: #000;
+}
+.search-container {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
 }
