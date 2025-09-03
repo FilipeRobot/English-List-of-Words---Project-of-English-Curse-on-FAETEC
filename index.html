@@ -22,6 +22,11 @@
 		<main>
 			<section class="card">
 				<h2>Add Words</h2>
+				<!-- Campo de busca -->
+				<div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem;">
+					<input type="text" id="busca" placeholder="Buscar palavra ou tradução..." style="flex:2; max-width: 300px;" />
+					<button id="btn-busca" type="button">Buscar</button>
+				</div>
 				<div class="input-container">
 					<input type="text" id="english_word" placeholder="English Word" />
 					<input
@@ -30,6 +35,7 @@
 						placeholder="Portuguese Translation"
 					/>
 					<button onclick="adicionarEntrada()">Add</button>
+					<button hidden onclick="salvarEdicao()">Salvar</button>
 				</div>
 
 				<p id="mensagem-erro"></p>
@@ -40,6 +46,7 @@
 							<th>Number</th>
 							<th>English Word</th>
 							<th>Portuguese Translation</th>
+							<th>Edit</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
