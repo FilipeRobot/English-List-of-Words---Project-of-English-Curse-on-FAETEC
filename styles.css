@@ -147,7 +147,7 @@ body.light-theme .card {
     margin-bottom: 1rem;
 }
 
-#mensagem-erro {
+#system-message {
     color: #ff4d4d;
     font-size: 0.9rem;
     margin-bottom: 1rem;
@@ -155,9 +155,21 @@ body.light-theme .card {
     transition: color 0.3s;
     }
     
-    #mensagem-erro.success {
+    #system-message.success {
         color: #4caf50;
-}
+        border-left: 4px solid #4caf50;
+    }
+        
+    #system-message.error {
+        color: #ff4d4d;
+        border-left: 4px solid #ff4d4d;
+    }
+        
+    #system-message.warning {
+        color: #fbc02d;
+        border-left: 4px solid #fbc02d;
+    }
+    
 
 input[type="text"] {
     flex: 1;
