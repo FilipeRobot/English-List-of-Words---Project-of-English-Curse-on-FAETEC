@@ -3,6 +3,7 @@
  * @param {number} id - O ID do item a ser editado.
  * @param {string} newEnglish - Novo valor para English_word.
  * @param {string} newPortuguese - Novo valor para Portuguese_word.
+ * @returns {boolean} - Retorna true se editou, false se não encontrou o item.
  */
 function editarItem(id, newEnglish, newPortuguese) {
 	if (!itens.has(id)) return false;
@@ -30,7 +31,11 @@ function buscarItens(termo) {
 	);
 }
 
-// Atualiza a tabela exibindo apenas os itens filtrados pela busca
+/**
+ * Atualiza a tabela exibindo apenas os itens filtrados pela busca.
+ * Renderiza as linhas da tabela de acordo com o array filtrado.
+ * @param {Array} itensFiltrados - Array de itens a serem exibidos na tabela.
+ */
 function atualizarTabelaFiltrada(itensFiltrados) {
 	const tabelaBody = document
 		.getElementById('tabela')
@@ -78,8 +83,7 @@ function atualizarTabelaFiltrada(itensFiltrados) {
 		tableRemoveCol.appendChild(btnRemover);
 	});
 }
-// Contador para gerar IDs únicos para cada entrada
-let contador = 0;
+
 // Mapa que armazena os itens inseridos (ID como chave)
 let itens = new Map();
 let idEmEdicao = null;
@@ -112,8 +116,6 @@ window.onload = function onload() {
 		// Recupera array salvo e converte para Map
 		const arr = JSON.parse(dadosSalvos);
 		itens = new Map(arr.map((item) => [item.ID, item]));
-		// Atualiza o contador com base no maior ID salvo
-		contador = arr.length > 0 ? Math.max(...arr.map((i) => i.ID)) : 0;
 		atualizarTabela();
 	}
 
@@ -124,13 +126,19 @@ window.onload = function onload() {
 	}
 };
 
-// Salva o array de itens no localStorage
+/**
+ * Salva o array de itens no localStorage.
+ * Converte o Map em array antes de salvar.
+ */
 function salvarLocalStorage() {
 	// Salva os itens como array no localStorage
 	localStorage.setItem('itens', JSON.stringify(Array.from(itens.values())));
 }
 
-// Adiciona uma nova entrada à lista e atualiza a tabela e o localStorage
+/**
+ * Adiciona uma nova entrada à lista e atualiza a tabela e o localStorage.
+ * Valida os campos, verifica duplicidade e insere novo item com ID único.
+ */
 function adicionarEntrada() {
 	// Obtém e limpa os valores dos campos de entrada
 	// Referência aos campos de entrada e à área de mensagem de erro
@@ -169,13 +177,14 @@ function adicionarEntrada() {
 		document.getElementById('portuguese_word').value = '';
 		return;
 	}
-
-	// Incrementa o contador para gerar um novo ID
-	contador++;
+	// Calcula o próximo ID dinamicamente
+	const nextID =
+		itens.size > 0
+			? Math.max(...Array.from(itens.values()).map((i) => i.ID)) + 1
+			: 1;
 	// Cria o objeto do novo item
-	// Monta o novo objeto de item
 	const novoItem = {
-		ID: contador,
+		ID: nextID,
 		English_word: english_word,
 		Portuguese_word: portuguese_word,
 	};
@@ -192,7 +201,10 @@ function adicionarEntrada() {
 	document.getElementById('portuguese_word').value = '';
 }
 
-// Atualiza a tabela HTML com os itens do array
+/**
+ * Atualiza a tabela HTML exibindo todos os itens do Map.
+ * Renderiza as linhas da tabela em ordem decrescente de ID.
+ */
 function atualizarTabela() {
 	// Seleciona o corpo da tabela
 	// Obtém referência ao corpo da tabela
@@ -246,7 +258,29 @@ function atualizarTabela() {
 	});
 }
 
-// Alterna o tema entre claro e escuro
+/**
+ * Remove um item do Map pelo ID, atualiza localStorage e tabela.
+ * Se estiver filtrando, atualiza a tabela filtrada também.
+ * @param {number} id - O ID do item a ser removido.
+ */
+function removerItem(id) {
+	if (itens.has(id)) {
+		itens.delete(id);
+		// contador removido
+		salvarLocalStorage();
+		atualizarTabela();
+		// Se estiver filtrando, atualiza a tabela filtrada
+		const buscaInput = document.getElementById('busca');
+		if (buscaInput && buscaInput.value.length >= 3) {
+			const filtrados = buscarItens(buscaInput.value);
+			atualizarTabelaFiltrada(filtrados);
+		}
+	}
+}
+
+/**
+ * Alterna o tema entre claro e escuro, salvando a preferência no localStorage.
+ */
 function alternarTema() {
 	// Alterna a classe do body para mudar o tema
 	document.body.classList.toggle('light-theme');
@@ -257,6 +291,10 @@ function alternarTema() {
 	localStorage.setItem('tema', tema);
 }
 
+/**
+ * Salva as edições feitas no item selecionado e atualiza a tabela.
+ * Exibe mensagem de sucesso e alterna visibilidade dos botões.
+ */
 function salvarEdicao() {
 	const english_word = document.getElementById('english_word').value.trim();
 	const portuguese_word = document
@@ -307,25 +345,6 @@ function salvarEdicao() {
 			mensagemErro.style.display = 'none';
 			mensagemErro.style.color = '#ff4d4d';
 		}, 2000);
-	}
-}
-
-/**
- * Remove um item do Map pelo ID, atualiza localStorage e tabela.
- * @param {number} id - O ID do item a ser removido.
- */
-function removerItem(id) {
-	if (itens.has(id)) {
-		itens.delete(id);
-		contador--;
-		salvarLocalStorage();
-		atualizarTabela();
-		// Se estiver filtrando, atualiza a tabela filtrada
-		const buscaInput = document.getElementById('busca');
-		if (buscaInput && buscaInput.value.length >= 3) {
-			const filtrados = buscarItens(buscaInput.value);
-			atualizarTabelaFiltrada(filtrados);
-		}
 	}
 }
 
