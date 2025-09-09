@@ -157,6 +157,7 @@ const WordListApp = {
 	clearFields() {
 		document.getElementById('english_word').value = '';
 		document.getElementById('portuguese_word').value = '';
+		document.getElementById('english_word').focus();
 	},
 
 	/**
@@ -206,7 +207,6 @@ const WordListApp = {
 		this.renderTable();
 		this.clearFields();
 		this.showMessage('Word added successfully!', 'success');
-		document.getElementById('english_word').focus();
 	},
 
 	/**
