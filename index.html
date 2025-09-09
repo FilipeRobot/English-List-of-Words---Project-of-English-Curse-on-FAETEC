@@ -23,10 +23,10 @@
 			<section class="card">
 				<h2>Add Words</h2>
 				<!-- Campo de busca -->
-				<search class="search-container">
-					<input type="text" id="busca" placeholder="Search word or translation..." style="flex:2; max-width: 300px;" />
-					<button id="btn-busca" type="button">Search</button>
-				</search>
+				   <div class="search-container">
+					   <input type="text" id="busca" placeholder="Search word or translation..." style="flex:2; max-width: 300px;" />
+					   <button id="btn-busca" type="button">Search</button>
+				   </div>
 				<div class="input-container">
 					<input type="text" id="english_word" placeholder="English Word" />
 					<input
@@ -34,8 +34,8 @@
 						id="portuguese_word"
 						placeholder="Portuguese Translation"
 					/>
-					<button onclick="adicionarEntrada()">Add</button>
-					<button hidden onclick="salvarEdicao()">Save</button>
+					   <button id="add-item">Add</button>
+					   <button id="save-item" class="save" hidden>Save</button>
 				</div>
 
 				<p id="mensagem-erro"></p>
@@ -61,9 +61,7 @@
 				<a style="color: #f4f4f9" href="https://github.com/FilipeRobot"> FilipeRobot(GitHub)</a>
 			</p>
 			<p><a style="color: #f4f4f9" href="https://github.com/FilipeRobot/#"> GitHub Repository of this project</a></p>
-			<button id="theme-toggle" onclick="alternarTema()">
-				Alter Theme
-			</button>
+			   <button id="theme-toggle">Toggle Theme</button>
 		</footer>
 	</body>
 </html>
