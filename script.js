@@ -260,22 +260,30 @@ function atualizarTabela() {
 
 /**
  * Remove um item do Map pelo ID, atualiza localStorage e tabela.
+ * Após a remoção, atualiza os IDs dos itens restantes para manter a sequência.
  * Se estiver filtrando, atualiza a tabela filtrada também.
  * @param {number} id - O ID do item a ser removido.
  */
 function removerItem(id) {
-	if (itens.has(id)) {
-		itens.delete(id);
-		// contador removido
-		salvarLocalStorage();
-		atualizarTabela();
-		// Se estiver filtrando, atualiza a tabela filtrada
-		const buscaInput = document.getElementById('busca');
-		if (buscaInput && buscaInput.value.length >= 3) {
-			const filtrados = buscarItens(buscaInput.value);
-			atualizarTabelaFiltrada(filtrados);
-		}
-	}
+    if (itens.has(id)) {
+        itens.delete(id);
+        // Atualiza os IDs dos itens restantes para manter sequência
+        const novosItens = Array.from(itens.values())
+            .sort((a, b) => a.ID - b.ID)
+            .map((item, idx) => ({
+                ...item,
+                ID: idx + 1
+            }));
+        itens = new Map(novosItens.map(item => [item.ID, item]));
+        salvarLocalStorage();
+        atualizarTabela();
+        // Se estiver filtrando, atualiza a tabela filtrada
+        const buscaInput = document.getElementById('busca');
+        if (buscaInput && buscaInput.value.length >= 3) {
+            const filtrados = buscarItens(buscaInput.value);
+            atualizarTabelaFiltrada(filtrados);
+        }
+    }
 }
 
 /**
