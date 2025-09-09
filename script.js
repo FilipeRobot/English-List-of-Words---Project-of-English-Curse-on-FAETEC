@@ -206,6 +206,7 @@ const WordListApp = {
 		this.renderTable();
 		this.clearFields();
 		this.showMessage('Word added successfully!', 'success');
+		document.getElementById('english_word').focus();
 	},
 
 	/**
