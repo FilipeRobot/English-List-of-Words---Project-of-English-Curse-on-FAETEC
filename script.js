@@ -52,6 +52,7 @@ const WordListApp = {
         document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
         document.getElementById('add-item').onclick = () => this.addItem();
         document.getElementById('save-item').onclick = () => this.saveEdit();
+        document.getElementById('cancel-edit').onclick = () => this.cancelEdit();
     },
 
     /**
@@ -163,6 +164,7 @@ const WordListApp = {
         this.idEmEdicao = item.ID;
         document.getElementById('add-item')?.setAttribute('hidden', '');
         document.getElementById('save-item')?.removeAttribute('hidden');
+        document.getElementById('cancel-edit')?.removeAttribute('hidden');
         this.showMessage('', '#ff4d4d');
         document.getElementById('mensagem-erro').style.display = 'none';
     },
@@ -183,6 +185,7 @@ const WordListApp = {
             this.showMessage('Edit saved successfully!', '#4caf50');
             this.clearFields();
             document.getElementById('save-item')?.setAttribute('hidden', '');
+            document.getElementById('cancel-edit')?.setAttribute('hidden', '');
             document.getElementById('add-item')?.removeAttribute('hidden');
             this.idEmEdicao = null;
         }
@@ -224,6 +227,19 @@ const WordListApp = {
             this.saveToStorage();
             this.renderTable();
         }
+    },
+
+    /**
+     * Cancela a edição, limpa campos e retorna ao modo de adição.
+     */
+    cancelEdit() {
+        this.clearFields();
+        document.getElementById('save-item')?.setAttribute('hidden', '');
+        document.getElementById('cancel-edit')?.setAttribute('hidden', '');
+        document.getElementById('add-item')?.removeAttribute('hidden');
+        this.idEmEdicao = null;
+        this.showMessage('', '#ff4d4d');
+        document.getElementById('mensagem-erro').style.display = 'none';
     },
 
     /**
