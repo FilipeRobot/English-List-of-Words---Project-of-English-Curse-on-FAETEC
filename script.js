@@ -46,7 +46,7 @@ const WordListApp = {
     setupEvents() {
         document.getElementById('btn-busca').addEventListener('click', () => this.renderTable());
         document.getElementById('busca').addEventListener('input', () => this.renderTable());
-        document.getElementById('english_word').addEventListener('keypress', (e) => {
+        document.getElementById('portuguese_word').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.addItem();
         });
         document.getElementById('theme-toggle').addEventListener('click', () => this.toggleTheme());
